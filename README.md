@@ -21,6 +21,7 @@ Here’s the truth table for a 1-bit full adder:
 
 ![tt](https://github.com/user-attachments/assets/0b3ab24f-1d7e-4a01-80ce-5e7406f4082b)
 
+
 ### Fig 1 : Diagram and truth table of full adder
 
 ### Logic Expressions:
@@ -57,9 +58,58 @@ Note : File name should be with HDL Extension
 
 •	fa_4bit_test.v → Test bench 
 
-*/Program to design 4 bit adder by instantiating 1 bit Full adder.also add test bench program */
-Developed by: Register Number*/
+**Verilog code for 1 Bit Full adder** <br>
+```
+module full_adder(A,B,CIN,S,COUT);
+input A,B,CIN;
+output S,COUT;
+assign S=A^B^CIN;
+assign COUT=(A&B) | (CIN&(A^B));
+endmodule
 
+```
+**Verilog Code for 4 Bit Full Adder** <br>
+```
+
+module fulladd_4bit(A,B,C0,S,C4);
+input C0,[3:0] A,B;
+output C4,[3:0] S;
+wire C1,C2,C3;
+full_adder fa0 (A[0],B[0],C0,S[0],C1);
+full_adder fa1 (A[1],B[1],C1,S[1],C2);
+full_adder fa2 (A[2],B[2],C2,S[2],C3);
+full_adder fa3 (A[3],B[3],C3,S[3],C4);
+endmodule
+
+```
+**a) Verify the Functionality** <br>
+<br>
+&emsp;&emsp;Three Codes shall be written for implementation of 4-bit Adder as follows, <br>
+
+&emsp;&emsp;&emsp;&emsp;fa.v → Single Bit 3-Input Full Adder [Sub-Module / Function] <br>
+
+&emsp;&emsp;&emsp;&emsp;fa_4bit.v → Top Module for Adding 4-bit Inputs. <br>
+
+&emsp;&emsp;&emsp;&emsp;fa_4bit_test.v → Test bench <br>
+<br>
+
+**Testbench Code for 4 bit Full Adder** <br>
+```
+
+module test_4bit;
+reg [3:0] A;
+reg [3:0] B; reg C0;
+wire [3:0] S; wire C4;
+fulladd_4bit dut (A,B,C0,S,C4);
+initial begin
+A=4'b0011;B=4'b0011;C0=1'b0;
+#10;  A=4'b1011;B=4'b0111;C0=1'b1;
+#10; A=4'b1111;B=4'b1111;C0=1'b1;
+#10; $finish;
+end
+endmodule
+
+```
 ## Functional Simulation: 
 
 	Invoke the cadence environment by type the below commands 
@@ -84,11 +134,15 @@ or
 
 	It will invoke the nclaunch window for functional simulation we can compile,elaborate and simulate it using Multiple Step .
 
+![Screenshot (129)](https://github.com/user-attachments/assets/d0df5382-1bc9-4926-bff9-5f7bd7e14435)
+
 ### Fig 4:Setting Multi-step simulation
 
 	Select Multiple Step and then select “Create cds.lib File” .
 
 	Click the cds.lib file and save the file by clicking on Save option 
+
+![Screenshot (130)](https://github.com/user-attachments/assets/f3e0ba20-e003-4461-b593-8c02735374bb)
 
 ### Fig 5:cds.lib file Creation
 
@@ -100,7 +154,7 @@ or
 
 •	A Click “OK” in the “nclaunch: Open Design Directory” window as shown in below figure 
 
-![image](https://github.com/user-attachments/assets/781b297a-11e9-4140-89c5-ee3b0d15bbd4)
+![Screenshot (130)](https://github.com/user-attachments/assets/f3e0ba20-e003-4461-b593-8c02735374bb)
 
 ### Fig 6: Selection of Don’t include any libraries
 
@@ -109,10 +163,13 @@ or
 	Left side you can see the HDL files. Right side of the window has worklib and snapshots directories listed. 
 
 	Worklib is the directory where all the compiled codes are stored while Snapshot will have output of elaboration which in turn goes for simulation .
-
 	To perform the function simulation, the following three steps are involved Compilation, Elaboration and Simulation. 
 
+![Screenshot (132)](https://github.com/user-attachments/assets/d3f6cee5-e8a2-4687-b899-7a2753ed8692)
+
 ### Fig 7: Nclaunch Window
+
+![Screenshot (129)](https://github.com/user-attachments/assets/bb143fe3-1476-4e4a-a25d-21a8f6ab1f50)
 
 ## Step 1: Compilation:– Process to check the correct Verilog language syntax and usage 
 
@@ -139,6 +196,9 @@ i.e Cadence IES command for compile: ncverilog +access+rwc -compile fa.v
 
 	The cds.lib file is an ASCII text file. It defines which libraries are accessible and where they are located. It contains statements that map logical library names to their physical directory paths. For this Design, you will define a library called “worklib”
 
+![Screenshot 2024-11-18 175606](https://github.com/user-attachments/assets/dd0d3744-d25e-4c60-9718-158a46272706)
+
+
 ## Step 2: Elaboration:– To check the port connections in hierarchical design 
 	Inputs: Top level design / test bench Verilog codes 
 
@@ -156,6 +216,8 @@ i.e Cadence IES command for compile: ncverilog +access+rwc -compile fa.v
 
 ### Fig 9: Elaboration Launch Option
 
+![Screenshot (234)](https://github.com/user-attachments/assets/58e7512e-32bd-4ebb-881b-022e2f767b57)
+
 ## Step 3: Simulation: – Simulate with the given test vectors over a period of time to observe the output behaviour. 
 
 	Inputs: Compiled and Elaborated top level module name 
@@ -170,9 +232,11 @@ i.e Cadence IES command for compile: ncverilog +access+rwc -compile fa.v
 
 ### Fig 11: Launching Simulation Waveform WindowSimulation Waveform Window
 
-### Fig 12: Simulation Waveform Window
+![Screenshot (235)](https://github.com/user-attachments/assets/052fccc9-2624-4222-aa6d-0c832e17ce54)
 
-### Result:
+### Fig 12: Simulation Waveform 
+
+
 
 The functionality of a 4-bit adder was successfully verified using a test bench and simulated with the nclaunch tool.
 
